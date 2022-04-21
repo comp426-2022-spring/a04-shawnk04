@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/comp426-2022-spring/a04-shawnk04/issues"
   },
-  "homepage": "https://github.com/comp426-2022-spring/a04-shawnk04#readme"
+  "homepage": "https://github.com/comp426-2022-spring/a04-shawnk04#readme",
+  "dependencies": {
+    "minimist": "^1.2.6"
+  }
 }
