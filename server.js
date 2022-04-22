@@ -4,6 +4,12 @@
 // Require http module
 const http = require('http');
 
+// Require fs
+const fs = require('fs');
+
+// Require morgan
+const morgan = require('morgan');
+
 // Require minimist module
 // Use minimist to process one argument `--port=` on the command line after `node server.js`.
 const args = require('minimist')(process.argv.slice(2));
@@ -140,10 +146,10 @@ server.js [options]
 --log		If set to false, no log files are written. Defaults to true.
             Logs are always written to database.
 --help, -h	Return this message and exit.
-`)
+`);
 
 // If --help is called, print help and exit
 if (args.help || args.h) {
-    console.log(help)
-    process.exit(0)
+    console.log(help);
+    process.exit(0);
 }
