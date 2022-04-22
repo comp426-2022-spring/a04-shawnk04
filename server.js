@@ -21,14 +21,17 @@ const app = express();
 // Require better-sqlite.
 const Database = require('better-sqlite3');
 
-// Connect to a database or create one if it doesn't exist yet.
-const db = new Database('user.db');
-
 // Define allowed argument name 'port'.
 args['port'];
 
 // Define a const `port` using the argument from the command line.
 const port = args.port || process.env.PORT || 3000;
+
+/*
+    DATABASE
+*/
+// Connect to a database or create one if it doesn't exist yet.
+const db = new Database('user.db');
 
 
 /*
