@@ -166,6 +166,11 @@ app.use( (req, res, next) => {
     next();
 });
 
+// Define error endpoint
+app.get('/app/error', (req, res) => {
+    throw new Error('Error test successful.');
+  })
+
 // Define check endpoint
 app.get('/app/', (req, res) => {
     // Respond with status 200
