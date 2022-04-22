@@ -25,7 +25,7 @@ const Database = require('better-sqlite3');
 args['port'];
 
 // Define a const `port` using the argument from the command line.
-const port = args.port || process.env.PORT || 3000;
+const port = args.port || process.env.PORT || 5555;
 
 /*
     DATABASE
@@ -225,7 +225,7 @@ if (args.log == 'false') {
     // Use morgan for logging to files
     // Create a write stream to append to an access.log file
     const accessLog = fs.createWriteStream('access.log', { flags: 'a' });
-    
+
     // Set up the access logging middleware
     app.use(morgan('combined', { stream: accessLog }));
 }
