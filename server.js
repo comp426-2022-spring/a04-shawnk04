@@ -18,6 +18,12 @@ const args = require('minimist')(process.argv.slice(2));
 const express = require('express');
 const app = express();
 
+// Require better-sqlite.
+const Database = require('better-sqlite3');
+
+// Connect to a database or create one if it doesn't exist yet.
+const db = new Database('user.db');
+
 // Define allowed argument name 'port'.
 args['port'];
 
