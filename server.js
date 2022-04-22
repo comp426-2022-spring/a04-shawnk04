@@ -166,10 +166,20 @@ app.use( (req, res, next) => {
     next();
 });
 
-// Define error endpoint
-app.get('/app/error', (req, res) => {
-    throw new Error('Error test successful.');
-  })
+// Check if appropriate to run error and log access endpoints
+if (args.debug || args.d) {
+    // Define log access endpoint
+    app.get('/app/log/access/', (req, res, next) => {
+        const stmt = db.prepare("SELECT * FROM accesslog").all();
+	    res.status(200).json(stmt);
+    })
+
+    // Define error endpoint
+    app.get('/app/error', (req, res) => {
+        throw new Error('Error test successful.');
+    })
+}
+
 
 // Define check endpoint
 app.get('/app/', (req, res) => {
