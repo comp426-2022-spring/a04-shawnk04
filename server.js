@@ -215,6 +215,22 @@ app.get('/app/flip/call/tails', (req, res) => {
 });
 
 
+/*
+    LOGS
+*/
+// If --log == false, don't make a log file
+if (args.log == 'false') {
+    console.log("NOTICE: not creating file access.log");
+} else {
+    // Use morgan for logging to files
+    // Create a write stream to append to an access.log file
+    const accessLog = fs.createWriteStream('access.log', { flags: 'a' });
+    
+    // Set up the access logging middleware
+    app.use(morgan('combined', { stream: accessLog }));
+}
+
+
 /* 
     SERVER 
 */
