@@ -108,6 +108,11 @@ function flipACoin(call) {
 /* 
     ENDPOINTS 
 */
+// Define database endpoint
+app.use( (req, res, next) => {
+    // Your middleware goes here.
+})
+
 // Define check endpoint
 app.get('/app/', (req, res) => {
     // Respond with status 200
