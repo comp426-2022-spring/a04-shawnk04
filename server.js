@@ -128,6 +128,7 @@ app.use(function(req, res){
 /*
     HELP
 */
+// Define help constant
 const help = (`
 server.js [options]
 --port, -p	Set the port number for the server to listen on. Must be an integer
@@ -140,3 +141,9 @@ server.js [options]
             Logs are always written to database.
 --help, -h	Return this message and exit.
 `)
+
+// If --help is called, print help and exit
+if (args.help || args.h) {
+    console.log(help)
+    process.exit(0)
+}
