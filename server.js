@@ -14,14 +14,14 @@ const morgan = require('morgan');
 // Use minimist to process one argument `--port=` on the command line after `node server.js`.
 const args = require('minimist')(process.argv.slice(2));
 
+// Require exports from database.js
+const db = require('./database.js');
+
 // Require Express.js
 const express = require('express');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Require better-sqlite.
-const Database = require('better-sqlite3');
 
 // Define allowed argument name 'port'.
 args['port'];
@@ -44,45 +44,6 @@ if (args.log == 'false') {
     // Set up the access logging middleware
     app.use(morgan('combined', { stream: accessLog }));
 }
-
-
-/*
-    DATABASE
-*/
-// Connect to a database or create one if it doesn't exist yet.
-const db = new Database('user.db');
-
-// Is the database initialized or do we need to initialize it?
-const stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' and name='accesslog';`);
-
-let row = stmt.get();
-
-if (row === undefined) {
-    console.log('Log database appears to be empty. Creating log database...');
-
-    const sqlInit = `
-        CREATE TABLE accesslog ( 
-            id INTEGER PRIMARY KEY, 
-            remoteaddr TEXT,
-            remoteuser TEXT,
-            time TEXT,
-            method TEXT,
-            url TEXT,
-            protocol TEXT,
-            httpversion TEXT,
-            status TEXT, 
-            referrer TEXT,
-            useragent TEXT
-        );
-    `
-
-    db.exec(sqlInit);
-} else {
-    console.log('Log database exists.');
-}
-
-// Export all of the above as a module so that we can use it elsewhere.
-module.exports = db;
 
 
 /*
