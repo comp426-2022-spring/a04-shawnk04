@@ -17,6 +17,8 @@ const args = require('minimist')(process.argv.slice(2));
 // Require Express.js
 const express = require('express');
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Require better-sqlite.
 const Database = require('better-sqlite3');
@@ -26,6 +28,23 @@ args['port'];
 
 // Define a const `port` using the argument from the command line.
 const port = args.port || process.env.PORT || 5555;
+
+
+/*
+    LOGS
+*/
+// If --log == false, don't make a log file
+if (args.log == 'false') {
+    console.log("NOTICE: not creating file access.log");
+} else {
+    // Use morgan for logging to files
+    // Create a write stream to append to an access.log file
+    const accessLog = fs.createWriteStream('access.log', { flags: 'a' });
+
+    // Set up the access logging middleware
+    app.use(morgan('combined', { stream: accessLog }));
+}
+
 
 /*
     DATABASE
@@ -161,8 +180,8 @@ app.use( (req, res, next) => {
         useragent: req.headers['user-agent']
     };
     console.log(logdata);
-    const databaseprep = db.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referrer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    const info = databaseprep.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referrer, logdata.useragent);
+    const stmt = db.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referrer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    const info = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referrer, logdata.useragent);
     next();
 });
 
@@ -213,22 +232,6 @@ app.get('/app/flip/call/tails', (req, res) => {
 	const flip = flipACoin('tails');
     res.status(200).json({ 'call' : flip.call, 'flip': flip.flip, 'result': flip.result});
 });
-
-
-/*
-    LOGS
-*/
-// If --log == false, don't make a log file
-if (args.log == 'false') {
-    console.log("NOTICE: not creating file access.log");
-} else {
-    // Use morgan for logging to files
-    // Create a write stream to append to an access.log file
-    const accessLog = fs.createWriteStream('access.log', { flags: 'a' });
-
-    // Set up the access logging middleware
-    app.use(morgan('combined', { stream: accessLog }));
-}
 
 
 /* 
